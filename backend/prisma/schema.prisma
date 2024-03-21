@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SuperUser {
+  id       String @id @default(uuid())
+  name     String
+  email    String
+  password String
+}
+
+model Society {
+  id        String         @id @default(uuid())
+  name      String
+  address   String
+  admins    SocietyAdmin[]
+  residents Resident[]
+}
+
+model SocietyAdmin {
+  id        String  @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  society   Society @relation(fields: [societyId], references: [id])
+  societyId String
+}
+
+model Resident {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  name      String
+  society   Society @relation(fields: [societyId], references: [id])
+  societyId String
+}
