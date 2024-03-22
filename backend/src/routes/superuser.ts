@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { superUserSignUpInput } from "@suyashlale/mygate-clone";
+import {
+    superuserSignInInput,
+    superUserSignUpInput,
+} from "@suyashlale/mygate-clone";
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
 
@@ -64,16 +67,56 @@ superuserRouter.post("/signup", async (c) => {
 /**
  * *POST: Sign-in superuser
  */
-superuserRouter.post("/signin", async c => {
-
+superuserRouter.post("/signin", async (c) => {
     // Initialize Prisma Client
     const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
+        datasourceUrl: c.env.DATABASE_URL,
     });
 
     // Get the request body
     const body = await c.req.json();
 
     // SafeParse the request body
-    
-})
+    const { success } = superuserSignInInput.safeParse(body);
+
+    // Enforce validation
+    if (!success) {
+        c.status(411);
+        return c.json({
+            error: "Input validation failed",
+        });
+    }
+
+    // Sign the user in
+    try {
+        // Get the email/pwd from the body and check in DB
+        const user = await prisma.superUser.findUnique({
+            where: {
+                email: body.email,
+                password: body.password,
+            },
+        });
+        if (!user) {
+            c.status(403);
+            return c.json({
+                error: "Unauthorized",
+            });
+        }
+
+        // Create the JWT
+        const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+        // Return
+        c.status(200);
+        return c.json({
+            message: "Sign-in successful",
+            token,
+        });
+    } catch (e) {
+        console.log("Internal Error: superuser/signin: ", e);
+        c.status(500);
+        return c.json({
+            error: "Internal Error: supersuer/signin",
+        });
+    }
+});
