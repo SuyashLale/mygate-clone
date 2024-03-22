@@ -10,13 +10,13 @@ datasource db {
 model SuperUser {
   id       String @id @default(uuid())
   name     String
-  email    String
+  email    String @unique
   password String
 }
 
 model Society {
   id        String         @id @default(uuid())
-  name      String
+  name      String         @unique
   address   String
   admins    SocietyAdmin[]
   residents Resident[]
@@ -25,7 +25,7 @@ model Society {
 model SocietyAdmin {
   id        String  @id @default(uuid())
   name      String
-  email     String
+  email     String  @unique
   password  String
   society   Society @relation(fields: [societyId], references: [id])
   societyId String
