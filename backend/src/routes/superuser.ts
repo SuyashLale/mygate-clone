@@ -71,7 +71,7 @@ superuserRouter.post("/signin", async (c) => {
     // Initialize Prisma Client
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
-    });
+    }).$extends(withAccelerate());
 
     // Get the request body
     const body = await c.req.json();
