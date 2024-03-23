@@ -71,3 +71,13 @@ export declare const residentSignInInput: z.ZodObject<{
     email: string;
     password: string;
 }>;
+export declare const createSocietyInput: z.ZodObject<{
+    name: z.ZodString;
+    address: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    address: string;
+}, {
+    name: string;
+    address: string;
+}>;

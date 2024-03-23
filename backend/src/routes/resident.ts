@@ -5,6 +5,7 @@ import {
     residentSignUpInput,
 } from "@suyashlale/mygate-clone";
 import { Hono } from "hono";
+import { sign } from "hono/jwt";
 
 export const residentRouter = new Hono<{
     Bindings: {
@@ -72,4 +73,32 @@ residentRouter.post("/signin", async (c) => {
 
     // SafeParse tthe input
     const { success } = residentSignInInput.safeParse(body);
+
+    // Enforce validation
+    if (!success) {
+        c.status(411);
+        return c.json({
+            error: "Input validation failed",
+        });
+    }
+
+    // Check the email and password and sign the user in
+    const resident = await prisma.resident.findUnique({
+        where: {
+            email: body.email,
+            password: body.password,
+        },
+    });
+    if (!resident) {
+        c.status(403);
+        return c.json({
+            error: "Unauthorized",
+        });
+    }
+    const token = await sign({ id: resident.id }, c.env.JWT_SECRET);
+    c.status(200);
+    return c.json({
+        message: "Sign-in successful",
+        token,
+    });
 });
