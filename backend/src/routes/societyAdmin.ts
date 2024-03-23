@@ -12,9 +12,6 @@ export const societyAdminRouter = new Hono<{
         DATABASE_URL: string;
         JWT_SECRET: string;
     };
-    Variables: {
-        societyId: string;
-    };
 }>();
 
 /**
@@ -47,7 +44,7 @@ societyAdminRouter.post("/signup", async (c) => {
                 name: body.name,
                 email: body.email,
                 password: body.password,
-                societyId: c.get("societyId"),
+                societyId: body.societyId,
             },
         });
 

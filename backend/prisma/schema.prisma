@@ -19,7 +19,28 @@ model Society {
   name      String         @unique
   address   String
   admins    SocietyAdmin[]
+  blocks    Block[]
   residents Resident[]
+  Units     Unit[]
+}
+
+model Block {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  society   Society    @relation(fields: [societyId], references: [id])
+  societyId String
+  units     Unit[]
+  residents Resident[]
+}
+
+model Unit {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  block     Block     @relation(fields: [blockId], references: [id])
+  blockId   String
+  society   Society   @relation(fields: [societyId], references: [id])
+  societyId String
+  resident  Resident?
 }
 
 model SocietyAdmin {
@@ -38,4 +59,8 @@ model Resident {
   name      String
   society   Society @relation(fields: [societyId], references: [id])
   societyId String
+  block     Block   @relation(fields: [blockId], references: [id])
+  blockId   String
+  unit      Unit    @relation(fields: [unitId], references: [id])
+  unitId    String  @unique
 }

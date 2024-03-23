@@ -12,9 +12,6 @@ export const residentRouter = new Hono<{
         DATABASE_URL: string;
         JWT_SECRET: string;
     };
-    Variables: {
-        societyId: string;
-    };
 }>();
 
 /**
@@ -47,8 +44,18 @@ residentRouter.post("/signup", async (c) => {
                 name: body.name,
                 email: body.email,
                 password: body.password,
-                societyId: c.get("societyId"),
+                societyId: body.societyId,
             },
+        });
+
+        // Create the JWT
+        const token = await sign({ id: resident.id }, c.env.JWT_SECRET);
+
+        // Return
+        c.status(200);
+        return c.json({
+            message: "Sign-up successful",
+            token,
         });
     } catch (e) {
         console.log("Internal Error resident /sign-up: ", e);

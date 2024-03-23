@@ -8,7 +8,7 @@ const app = new Hono();
 
 app.route("/api/v1/superuser", superuserRouter);
 app.route("/api/v1/societyAdmin", societyAdminRouter);
-app.route("/api/v1/user", residentRouter);
+app.route("/api/v1/resident", residentRouter);
 app.route("/api/v1/society", societyRouter);
 
 export default app;
