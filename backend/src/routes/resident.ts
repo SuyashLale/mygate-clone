@@ -45,6 +45,8 @@ residentRouter.post("/signup", async (c) => {
                 email: body.email,
                 password: body.password,
                 societyId: body.societyId,
+                blockId: body.blockId,
+                unitId: body.unitId,
             },
         });
 

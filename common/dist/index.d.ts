@@ -29,14 +29,17 @@ export declare const societyAdminSignUpInput: z.ZodObject<{
     name: z.ZodString;
     email: z.ZodString;
     password: z.ZodString;
+    societyId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     name: string;
     email: string;
     password: string;
+    societyId: string;
 }, {
     name: string;
     email: string;
     password: string;
+    societyId: string;
 }>;
 export declare const societyAdminSignInInput: z.ZodObject<{
     email: z.ZodString;
@@ -80,4 +83,27 @@ export declare const createSocietyInput: z.ZodObject<{
 }, {
     name: string;
     address: string;
+}>;
+export declare const createBlockInput: z.ZodObject<{
+    name: z.ZodString;
+    societyId: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    societyId: string;
+}, {
+    name: string;
+    societyId: string;
+}>;
+export declare const createUnitInput: z.ZodObject<{
+    name: z.ZodString;
+    blockId: z.ZodString;
+    societyId: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    societyId: string;
+    blockId: string;
+}, {
+    name: string;
+    societyId: string;
+    blockId: string;
 }>;

@@ -23,6 +23,7 @@ export const societyAdminSignUpInput = z.object({
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(4),
+    societyId: z.string(),
 });
 
 // Sign-in SocietyAdmin
@@ -48,4 +49,17 @@ export const residentSignInInput = z.object({
 export const createSocietyInput = z.object({
     name: z.string(),
     address: z.string(),
+});
+
+// Create Society Block
+export const createBlockInput = z.object({
+    name: z.string(),
+    societyId: z.string(),
+});
+
+// Create Unit
+export const createUnitInput = z.object({
+    name: z.string(),
+    blockId: z.string(),
+    societyId: z.string(),
 });
