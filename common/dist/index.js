@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUnitInput = exports.createBlockInput = exports.createSocietyInput = exports.residentSignInInput = exports.residentSignUpInput = exports.societyAdminSignInInput = exports.societyAdminSignUpInput = exports.superuserSignInInput = exports.superUserSignUpInput = void 0;
+exports.createResidentInput = exports.createUnitInput = exports.createBlockInput = exports.createSocietyInput = exports.residentSignInInput = exports.residentSignUpInput = exports.societyAdminSignInInput = exports.societyAdminSignUpInput = exports.superuserSignInInput = exports.superUserSignUpInput = void 0;
 // Zod validation
 const zod_1 = __importDefault(require("zod"));
 /**
@@ -58,4 +58,12 @@ exports.createUnitInput = zod_1.default.object({
     name: zod_1.default.string(),
     blockId: zod_1.default.string(),
     societyId: zod_1.default.string(),
+});
+// Create Resident
+exports.createResidentInput = zod_1.default.object({
+    email: zod_1.default.string().email(),
+    name: zod_1.default.string(),
+    societyId: zod_1.default.string(),
+    blockId: zod_1.default.string(),
+    unit: zod_1.default.string(),
 });

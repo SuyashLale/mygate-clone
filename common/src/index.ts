@@ -63,3 +63,12 @@ export const createUnitInput = z.object({
     blockId: z.string(),
     societyId: z.string(),
 });
+
+// Create Resident
+export const createResidentInput = z.object({
+    email: z.string().email(),
+    name: z.string(),
+    societyId: z.string(),
+    blockId: z.string(),
+    unit: z.string(),
+});

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import {
     createBlockInput,
+    createResidentInput,
     createUnitInput,
     societyAdminSignInInput,
     societyAdminSignUpInput,
@@ -17,8 +18,8 @@ export const societyAdminRouter = new Hono<{
 }>();
 
 /**
- * TODO: A society admin should be able to add blocks, units and residents
- * TODO: A society admin should be able to map units to blocks and residents to units
+ * * A society admin should be able to add blocks, units and residents
+ * * A society admin should be able to map units to blocks and residents to units
  */
 
 /**
@@ -220,7 +221,7 @@ societyAdminRouter.post("/admin/unit", async (c) => {
         // Get hte req body
         const body = await c.req.json();
 
-        // SafePrse the request body
+        // SafeParse the request body
         const { success } = createUnitInput.safeParse(body);
 
         // Enforce Validation
@@ -251,6 +252,50 @@ societyAdminRouter.post("/admin/unit", async (c) => {
         c.status(500);
         return c.json({
             error: "Internal error /admin/unit",
+        });
+    }
+});
+
+/**
+ * *POST: Add Resident
+ */
+societyAdminRouter.post("/admin/resident", async (c) => {
+    try {
+        // Initialize prisma client
+        const prisma = new PrismaClient({
+            datasourceUrl: c.env.DATABASE_URL,
+        }).$extends(withAccelerate());
+
+        // Get the request body
+        const body = await c.req.json();
+
+        // SafeParse the request body
+        const { success } = createResidentInput.safeParse(body);
+
+        // Enforce validation
+        if (!success) {
+            c.status(411);
+            return c.json({
+                error: "Input validation failed",
+            });
+        }
+
+        // Create the resident in the DB
+        const resident = await prisma.resident.create({
+            data: {
+                email: body.email,
+                password: "changeme",
+                name: body.name,
+                society: body.societyId,
+                block: body.blockId,
+                unit: body.unitId,
+            },
+        });
+    } catch (e) {
+        console.log("Internal Error /societyAdmin/admin/resident: ", e);
+        c.status(500);
+        return c.json({
+            error: "Internal error: /societyAdmin/admin/resident",
         });
     }
 });

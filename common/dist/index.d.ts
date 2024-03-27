@@ -107,3 +107,22 @@ export declare const createUnitInput: z.ZodObject<{
     societyId: string;
     blockId: string;
 }>;
+export declare const createResidentInput: z.ZodObject<{
+    email: z.ZodString;
+    name: z.ZodString;
+    societyId: z.ZodString;
+    blockId: z.ZodString;
+    unit: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    email: string;
+    societyId: string;
+    blockId: string;
+    unit: string;
+}, {
+    name: string;
+    email: string;
+    societyId: string;
+    blockId: string;
+    unit: string;
+}>;
